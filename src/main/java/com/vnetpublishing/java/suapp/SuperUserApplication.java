@@ -32,7 +32,7 @@ public abstract class SuperUserApplication
 			sudo = new PosixSudo();
 		}
 		
-		return sudo.sudo(args);
+		return sudo.sudo(args, additionalArgs);
 	}
 
 	public final int sudo(String[] args) {
