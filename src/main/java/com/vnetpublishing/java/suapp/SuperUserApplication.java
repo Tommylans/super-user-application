@@ -15,7 +15,7 @@ public abstract class SuperUserApplication
 {
 	private final static Logger logger = Logger.getLogger(SuperUserApplication.class.getName());
 	
-	public final int sudo(String[] args) 
+	public final int sudo(String[] args, String[] additionalArgs)
 	{
 		String os = SU.getOS();
 		
@@ -33,6 +33,10 @@ public abstract class SuperUserApplication
 		}
 		
 		return sudo.sudo(args);
+	}
+
+	public final int sudo(String[] args) {
+		return sudo(args, new String[]{});
 	}
 	
 	public final int sudo() 

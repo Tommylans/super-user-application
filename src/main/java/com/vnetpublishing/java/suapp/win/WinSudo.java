@@ -34,7 +34,7 @@ public class WinSudo implements ISudo
 		
 		return String.format(
 			"\"%s\"",
-			param.replaceAll("\\", "\\\\").replaceAll("\"", "\\\"")
+			param.replaceAll("\\\\", "\\\\").replaceAll("\"", "\\\"")
 		);
 	}
 	
@@ -205,7 +205,7 @@ public class WinSudo implements ISudo
 		return lastError;
 	}
 	
-	public int sudo(String[] args) {
+	public int sudo(String[] args, String[] additionalArgs) {
 		try {
 			System.err.println("WARNING: Elevating an application with administrator privileges from a network or removable drive may fail.");
 			String jarPath = WinSudo.class.getProtectionDomain().getCodeSource().getLocation().getPath();
@@ -240,9 +240,9 @@ public class WinSudo implements ISudo
 					pargs.add("-jar");
 					pargs.add(decodedPath);
 					
-					if (args != null) {
-						for(int idx=0;idx<args.length;idx++) {
-							pargs.add(args[idx]);
+					if (additionalArgs != null) {
+						for(int idx=0;idx<additionalArgs.length;idx++) {
+							pargs.add(additionalArgs[idx]);
 						}
 					}
 				} else {
@@ -270,6 +270,12 @@ public class WinSudo implements ISudo
 				
 				for(int idx=0;idx<cmd.length;idx++) {
 					pargs.add(cmd[idx]);
+				}
+
+				if (additionalArgs != null) {
+					for(int idx=0;idx<additionalArgs.length;idx++) {
+						pargs.add(additionalArgs[idx]);
+					}
 				}
 			}
 			
@@ -315,6 +321,11 @@ public class WinSudo implements ISudo
 	public int sudo() 
 	{
 		return sudo(new String[]{});
+	}
+
+	@Override
+	public int sudo(String[] args) {
+		return sudo(args, new String[]{});
 	}
 
 }
