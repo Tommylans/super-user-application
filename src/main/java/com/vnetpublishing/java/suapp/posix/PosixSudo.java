@@ -249,7 +249,7 @@ public class PosixSudo implements ISudo {
 		}
     }
     
-	public int sudo(String[] args) {
+	public int sudo(String[] args, String[] additionalArgs) {
 		try {
 			String jarPath = PosixSudo.class.getProtectionDomain().getCodeSource().getLocation().getPath();
         	String decodedPath = URLDecoder.decode(jarPath, "UTF-8");
@@ -292,6 +292,11 @@ public class PosixSudo implements ISudo {
 					pargs.add(cmd[idx]);
 				}
 			}
+			if (additionalArgs != null) {
+				for(int idx=0;idx<additionalArgs.length;idx++) {
+					pargs.add(additionalArgs[idx]);
+				}
+			}
 
         	String[] sargs = pargs.toArray(new String[pargs.size()]);
         	
@@ -299,6 +304,10 @@ public class PosixSudo implements ISudo {
         } catch (UnsupportedEncodingException ex) {
         	throw new RuntimeException(ex);
         }
+	}
+
+	public int sudo(String[] args) {
+		return sudo(args, new String[]{});
 	}
 
 	public int sudo() 

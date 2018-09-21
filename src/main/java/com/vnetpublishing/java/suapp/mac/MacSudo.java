@@ -21,7 +21,7 @@ public class MacSudo implements ISudo {
 		
 		return String.format(
 			"\"%s\"",
-			param.replaceAll("\\", "\\\\\\\\").replaceAll("\"", "\\\\\\\"")
+			param.replaceAll("\\\\", "\\\\\\\\").replaceAll("\"", "\\\\\\\"")
 		);
 	}
 	
@@ -73,7 +73,7 @@ public class MacSudo implements ISudo {
 		}
     }
     
-	public int sudo(String[] args) {
+	public int sudo(String[] args, String[] additionalArgs) {
 		try {
 			String jarPath = MacSudo.class.getProtectionDomain().getCodeSource().getLocation().getPath();
         	String decodedPath = URLDecoder.decode(jarPath, "UTF-8");
@@ -113,6 +113,11 @@ public class MacSudo implements ISudo {
 				for(int idx=0;idx<cmd.length;idx++) {
 					pargs.add(cmd[idx]);
 				}
+				if (additionalArgs != null) {
+					for(int idx=0;idx<additionalArgs.length;idx++) {
+						pargs.add(additionalArgs[idx]);
+					}
+				}
 			}
 			
 			//System.out.println(pargs);
@@ -124,8 +129,11 @@ public class MacSudo implements ISudo {
         	throw new RuntimeException(ex);
         }
 	}
-	
-	
+
+	public int sudo(String[] args) {
+		return sudo(args, new String[]{});
+	}
+
 	public int sudo() 
 	{
 		return sudo(new String[]{});
